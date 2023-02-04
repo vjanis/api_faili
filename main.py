@@ -1,23 +1,35 @@
 import uvicorn
 import os
 from fastapi import FastAPI, File, UploadFile
+from kods.logosana import logi, auditacija
+from config import CHUNK_SIZE, FAILU_FOLDERIS
 
 app = FastAPI()
 
-FAILU_MAPE = os.path.join('.', 'faili')
-ATLAUTIE_FAILI = set(['csv'])
-CHUNK_SIZE = 2 ** 20  # 1MB
+FILE_FOLDER = os.path.join('.', FAILU_FOLDERIS)
+
 
 @app.get("/")
 async def root():
-    return {"message": "api_web darbojas"}
+    return {"message": "failu savākšana strādā"}
 
-#curl -F "file=@sezona.csv" http://localhost:8000/uploadfile
+
+# curl -F "file=@sezona.csv" http://localhost:8000/uploadfile
 @app.post("/uploadfile")
 async def create_upload_file(file: UploadFile = File(...)):
-    fullpath = os.path.join(FAILU_MAPE, file.filename)
-    await chunked_copy(file, fullpath)
-    return {"File saved to disk at": fullpath}
+    try:
+        fullpath = os.path.join(FILE_FOLDER, file.filename)
+        await chunked_copy(file, fullpath)
+        auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
+                   autorizacijas_lvl='INFO', statuss='OK')
+        logi("fails augšuplādēts: " + fullpath)
+        return {"fails augšuplādēts: ": fullpath}
+    except Exception as e:
+        auditacija(darbiba='api_faili_web', parametri="fails augšuplāde neveiksmiga: " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK')
+        logi("fails augšuplāde neveiksmiga: " + str(e))
+        return {"fails augšuplāde neveiksmiga: ": str(e)}
+
 
 async def chunked_copy(src, dst):
     await src.seek(0)
@@ -29,6 +41,7 @@ async def chunked_copy(src, dst):
                 break
             print(f"Consumed {len(contents)} bytes from Src file\n")
             buffer.write(contents)
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
