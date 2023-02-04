@@ -18,12 +18,24 @@ async def root():
 @app.post("/uploadfile")
 async def create_upload_file(file: UploadFile = File(...)):
     try:
-        fullpath = os.path.join(FILE_FOLDER, file.filename)
-        await chunked_copy(file, fullpath)
-        auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
-                   autorizacijas_lvl='INFO', statuss='OK')
-        logi("fails augšuplādēts: " + fullpath)
-        return {"fails augšuplādēts: ": fullpath}
+        if file is not None:
+            if file.filename[-4] == '.csv':
+                fullpath = os.path.join(FILE_FOLDER, file.filename)
+                await chunked_copy(file, fullpath)
+                auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
+                           autorizacijas_lvl='INFO', statuss='OK')
+                logi("fails augšuplādēts: " + fullpath)
+                return {"fails augšuplādēts: ": fullpath}
+            else:
+                auditacija(darbiba='api_faili_web', parametri="nekorekts faila tips: " + file.filename,
+                           autorizacijas_lvl='WARNING', statuss='OK')
+                logi("nekorekts faila tips: " + file.filename)
+                return {"nekorekts faila tips: ": file.filename}
+        else:
+            auditacija(darbiba='api_faili_web', parametri="nav augšuplādējamā faila ",
+                       autorizacijas_lvl='WARNING', statuss='OK')
+            logi("nav augšuplādējamā faila ")
+            return {"nav augšuplādējamā faila "}
     except Exception as e:
         auditacija(darbiba='api_faili_web', parametri="fails augšuplāde neveiksmiga: " + str(e),
                    autorizacijas_lvl='ERROR', statuss='OK')

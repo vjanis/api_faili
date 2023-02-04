@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../comunity/api_csv/.idea/api_csv.iml" filepath="$PROJECT_DIR$/../comunity/api_csv/.idea/api_csv.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/api_faili.iml" filepath="$PROJECT_DIR$/.idea/api_faili.iml" />
     </modules>
   </component>
