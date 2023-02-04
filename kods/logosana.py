@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 
-from models import Auditacija as Aa
+from kods.models import Auditacija as Aa
 from sqlalchemy import create_engine, DateTime
 import datetime
 from config import DATABASE_URI
