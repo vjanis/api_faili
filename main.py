@@ -2,12 +2,11 @@ import uvicorn
 import os
 from fastapi import FastAPI, File, UploadFile
 from kods.logosana import logi, auditacija
-from config import CHUNK_SIZE, FAILU_FOLDERIS
+from config import CHUNK_SIZE, FAILU_FOLDERIS, FILE_SIZE
 
 app = FastAPI()
 
 FILE_FOLDER = os.path.join('.', FAILU_FOLDERIS)
-
 
 @app.get("/")
 async def root():
@@ -19,6 +18,11 @@ async def root():
 async def create_upload_file(file: UploadFile = File(...)):
     try:
         if file is not None:
+            if len(await file.read()) >= FILE_SIZE:
+                auditacija(darbiba='api_faili_web', parametri="Augšuplādētais fails par lielu: " + file.filename,
+                           autorizacijas_lvl='WARNING', statuss='OK')
+                logi("Augšuplādētais fails par lielu: " + file.filename)
+                return {"Augšuplādētais fails par lielu: " + file.filename}
             if file.filename[-4] == '.csv':
                 fullpath = os.path.join(FILE_FOLDER, file.filename)
                 await chunked_copy(file, fullpath)
