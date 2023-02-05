@@ -23,7 +23,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                            autorizacijas_lvl='WARNING', statuss='OK')
                 logi("Augšuplādētais fails par lielu: " + file.filename)
                 return {"Augšuplādētais fails par lielu: " + file.filename}
-            if file.filename[-4] == '.csv':
+            if file.filename[-4:] == '.csv':
                 fullpath = os.path.join(FILE_FOLDER, file.filename)
                 await chunked_copy(file, fullpath)
                 auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
