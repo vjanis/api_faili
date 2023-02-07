@@ -25,8 +25,8 @@ async def create_upload_file(file: UploadFile = File(...)):
                 logi("Augšuplādētais fails par lielu: " + file.filename)
                 return {"Augšuplādētais fails par lielu: " + file.filename}
             if file.filename[-4:] == '.csv':
-                jauns_nosaukums = datetime.utcnow().strftime('%Y%m%d_%H%M%S%f')[:-3] + file.filename[-4:] + \
-                                  file.filename[:-4] + "_"
+                jauns_nosaukums = datetime.utcnow().strftime('%Y%m%d_%H%M%S%f')[:-3] + "_" + file.filename[-4:] + \
+                                  file.filename[:-4]
                 fullpath = os.path.join(FILE_FOLDER, jauns_nosaukums)
                 await chunked_copy(file, fullpath)
                 auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
