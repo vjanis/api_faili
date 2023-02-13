@@ -1,9 +1,9 @@
 import uvicorn
 import os
 from fastapi import FastAPI, File, UploadFile
-from kods.logosana import logi, auditacija
+from kods.logosana import logi, auditacijas
 from config import CHUNK_SIZE, FAILU_FOLDERIS, FILE_SIZE
-from datetime import datetime, date
+from datetime import datetime
 
 app = FastAPI()
 
@@ -20,31 +20,31 @@ async def create_upload_file(file: UploadFile = File(...)):
     try:
         if file is not None:
             if len(await file.read()) >= FILE_SIZE:
-                auditacija(darbiba='api_faili_web', parametri="Augšuplādētais fails par lielu: " + file.filename,
-                           autorizacijas_lvl='WARNING', statuss='OK')
+                auditacijas(darbiba='api_faili_web', parametri="Augšuplādētais fails par lielu: " + file.filename,
+                           autorizacijas_lvl='WARNING', statuss='OK', metrika=6)
                 logi("Augšuplādētais fails par lielu: " + file.filename)
                 return {"Augšuplādētais fails par lielu: " + file.filename}
             if file.filename[-4:] == '.csv':
                 jauns_nosaukums = datetime.utcnow().strftime('%Y%m%d_%H%M%S%f')[:-3] + "_" + file.filename
                 fullpath = os.path.join(FILE_FOLDER, jauns_nosaukums)
                 await chunked_copy(file, fullpath)
-                auditacija(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
-                           autorizacijas_lvl='INFO', statuss='OK')
+                auditacijas(darbiba='api_faili_web', parametri="fails augšuplādēts: " + fullpath,
+                           autorizacijas_lvl='INFO', statuss='OK', metrika=8)
                 logi("fails augšuplādēts: " + fullpath)
                 return {"fails augšuplādēts: ": fullpath}
             else:
-                auditacija(darbiba='api_faili_web', parametri="nekorekts faila tips: " + file.filename,
-                           autorizacijas_lvl='WARNING', statuss='OK')
+                auditacijas(darbiba='api_faili_web', parametri="nekorekts faila tips: " + file.filename,
+                           autorizacijas_lvl='WARNING', statuss='OK', metrika=7)
                 logi("nekorekts faila tips: " + file.filename)
                 return {"nekorekts faila tips: ": file.filename}
         else:
-            auditacija(darbiba='api_faili_web', parametri="nav augšuplādējamā faila ",
-                       autorizacijas_lvl='WARNING', statuss='OK')
+            auditacijas(darbiba='api_faili_web', parametri="nav augšuplādējamā faila ",
+                       autorizacijas_lvl='WARNING', statuss='OK', metrika=9)
             logi("nav augšuplādējamā faila ")
             return {"nav augšuplādējamā faila "}
     except Exception as e:
-        auditacija(darbiba='api_faili_web', parametri="fails augšuplāde neveiksmiga: " + str(e),
-                   autorizacijas_lvl='ERROR', statuss='OK')
+        auditacijas(darbiba='api_faili_web', parametri="fails augšuplāde neveiksmiga: " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK', metrika=9)
         logi("fails augšuplāde neveiksmiga: " + str(e))
         return {"fails augšuplāde neveiksmiga: ": str(e)}
 
