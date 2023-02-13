@@ -10,7 +10,7 @@ Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un 
 * faila tips: jābūt .csv
 * faila izmērs: definēts config.py - FILE_SIZE
 
-### konfigs satur (.\config.py):
+### konfigs satur (./config.py):
 * DATABASE_URI - datubāzes konkecija
 * FAILU_FOLDERIS - folderis kurā tiek saglabati faili, šo nepieciešams piemapot kā volumi kopīgu ar konteineri kurša apstrādā failus
 * FILE_SIZE - maksimālais faila izmērs
