@@ -3,6 +3,7 @@ Konteinrs ar kuru augšuplādē .csv failus
 Izmantota Phyton valoda un uvicorn serveris kurš klausās 8000 portu
 
 Augšuplādi var izsaukt no komandrindas: curl -F "file=@sezona.csv" http://localhost:8000/uploadfile
+
 Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un laiku. Tas tiek darīts, lai būtu iespēja augšuplādēt daudzus vienādus failus (konteiners kurš apstrādā failus šo ņem vērā).
 
 ### Tiek pārbaudīts:
