@@ -18,6 +18,6 @@ Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un 
 
 ### Logi un Metrikas (definēts metrikas šim konteinerim, izsaucot auditāciju tiek palielinātas)
 * metrika=6, apraksts='api_faili_web: Augšuplādēts fails par lielu'
-* metrika=7, apraksts='api_faili_web: Atrasts nekortekts fails (ne .csv fails)'
+* metrika=7, apraksts='api_faili_web: Augšuplādēts nekortekts fails (ne .csv fails)'
 * metrika=8, apraksts='api_faili_web: Augšuplādēts .csv fails'
-* metrika=9, apraksts='api_faili_web: Augšuplādēts kļūdaina'
+* metrika=9, apraksts='api_faili_web: Augšuplāde kļūdaina'
