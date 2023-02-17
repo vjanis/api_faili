@@ -3,16 +3,24 @@ import os
 password = ''
 serveris = ''
 
+ieladet_env = True
+
 try:
-    password = os.environ['POSTGRES_PASSWORD']
-    serveris = 'api_db_image'
+    if ieladet_env:
+        password = os.environ['POSTGRES_PASSWORD']
+        serveris = 'api_db_image'
+        del os.environ['POSTGRES_PASSWORD']
+        ieladet_env = False
 except:
-    password = 'adminadmin'
-    serveris = 'localhost'
+    #Testa vide, kad nav norādīts env
+    if ieladet_env:
+        password = 'adminadmin'
+        serveris = 'localhost'
+        ieladet_env = False
+
 
 DATABASE_URI = 'postgresql://postgres:'+password+'@'+serveris+':5432/postgres'
-print(DATABASE_URI)
-#DATABASE_URI = 'postgresql://postgres:adminadmin@localhost:5432/postgres'
+
 FAILU_FOLDERIS = 'faili'
 FILE_SIZE = 104857600  # 100MB (bytes)
 CHUNK_SIZE = 2 ** 20  # 1MB
