@@ -5,7 +5,7 @@ serveris = ''
 
 try:
     password = os.environ['POSTGRES_PASSWORD']
-    server = 'api_db_image'
+    serveris = 'api_db_image'
 except:
     password = 'adminadmin'
     serveris = 'localhost'
