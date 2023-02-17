@@ -1,4 +1,17 @@
-DATABASE_URI = 'postgresql://postgres:adminadmin@api_db_image:5432/postgres'
+import os
+
+password = ''
+serveris = ''
+
+try:
+    password = os.environ['POSTGRES_PASSWORD']
+    server = 'api_db_image'
+except:
+    password = 'adminadmin'
+    serveris = 'localhost'
+
+DATABASE_URI = 'postgresql://postgres:'+password+'@'+serveris+':5432/postgres'
+print(DATABASE_URI)
 #DATABASE_URI = 'postgresql://postgres:adminadmin@localhost:5432/postgres'
 FAILU_FOLDERIS = 'faili'
 FILE_SIZE = 104857600  # 100MB (bytes)
