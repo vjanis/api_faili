@@ -10,6 +10,7 @@ class Base(DeclarativeBase):
 
 
 class Auditacija(Base):
+    __tablename__ = 'auditacija'
     id = Column(Integer, primary_key=True)
     laiks = Column(DateTime, default=datetime.datetime.utcnow)
     darbiba = Column(String)
