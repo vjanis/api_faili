@@ -36,7 +36,7 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
                         autorizacijas_lvl='WARNING', statuss='OK', metrika=27)
             logi("Nekorekts augšuplādes lietotājvārds vai parole")
         except:
-            pass
+            logi("ERROR auditacija: Nekorekts augšuplādes lietotājvārds vai parole")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nekorets lietotājvārds vai parole",
