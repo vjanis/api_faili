@@ -2,17 +2,20 @@
 Konteinrs ar kuru augšuplādē .csv failus
 Izmantota Phyton valoda un uvicorn serveris kurš klausās 8000 portu
 
-Augšuplādi var izsaukt no komandrindas: curl -F "file=@sezona.csv" http://localhost:8000/uploadfile
+Augšuplādi var izsaukt no komandrindas (piemērs ar noklusēto user:juris pass:peldbaseins): curl -H "Authorization: Basic anVyaXM6cGVsZGJhc2VpbnM=" -F "file=@iin.csv" http://localhost:8000/uploadfile
 
 Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un laiku. Tas tiek darīts, lai būtu iespēja augšuplādēt daudzus vienādus failus (konteiners kurš apstrādā failus šo ņem vērā).
 
 ### Tiek pārbaudīts:
 * faila tips: jābūt .csv
 * faila izmērs: definēts config.py - FILE_SIZE
+* basic autentifikācija ka env mainīgo jānodod lietotājvārdu un paroli ar kuru var augšuplādēt failu
 
 ### .env
 * POSTGRES_PASSWORD=parole
 * POSTGRES_CONTAINER=api_db_image
+* AUGSUPLADE_LIETOTAJS=juris
+* AUGSUPLADE_PAROLE=peldbaseins
 
 ### konfigs satur (./config.py):
 * DATABASE_URI - datubāzes konkecija

@@ -1,11 +1,17 @@
 import uvicorn
 import os
-from fastapi import FastAPI, File, UploadFile
+import secrets
+from fastapi import FastAPI, File, UploadFile, Depends, HTTPException, status
 from kods.logosana import logi, auditacijas
 from config import CHUNK_SIZE, FAILU_FOLDERIS, FILE_SIZE
 from datetime import datetime
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from config import AUGSUPLADE_LIETOTAJS, AUGSUPLADE_PAROLE
+
 
 app = FastAPI()
+
+security = HTTPBasic()
 
 FILE_FOLDER = os.path.join('.', FAILU_FOLDERIS)
 
@@ -13,10 +19,34 @@ FILE_FOLDER = os.path.join('.', FAILU_FOLDERIS)
 async def root():
     return {"message": "failu savākšana strādā"}
 
+def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
+    current_username_bytes = credentials.username.encode("utf8")
+    correct_username_bytes = bytes(AUGSUPLADE_LIETOTAJS, 'utf-8')
+    is_correct_username = secrets.compare_digest(
+        current_username_bytes, correct_username_bytes
+    )
+    current_password_bytes = credentials.password.encode("utf8")
+    correct_password_bytes = bytes(AUGSUPLADE_PAROLE, 'utf-8')
+    is_correct_password = secrets.compare_digest(
+        current_password_bytes, correct_password_bytes
+    )
+    if not (is_correct_username and is_correct_password):
+        try:
+            auditacijas(darbiba='api_faili_web', parametri="Nekorekts augšuplādes lietotājvārds vai parole",
+                        autorizacijas_lvl='WARNING', statuss='OK', metrika=27)
+            logi("Nekorekts augšuplādes lietotājvārds vai parole")
+        except:
+            pass
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Nekorets lietotājvārds vai parole",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 # curl -F "file=@sezona.csv" http://localhost:8000/uploadfile
 @app.post("/uploadfile")
-async def create_upload_file(file: UploadFile = File(...)):
+async def create_upload_file(file: UploadFile = File(...), username: str = Depends(get_current_username)):
     try:
         if file is not None:
             if len(await file.read()) >= FILE_SIZE:

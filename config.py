@@ -3,12 +3,17 @@ import os
 password = ''
 serveris = ''
 
+AUGSUPLADE_LIETOTAJS = ''
+AUGSUPLADE_PAROLE = ''
+
 ieladet_env = True
 
 try:
     if ieladet_env:
         password = os.environ['POSTGRES_PASSWORD']
-        password = os.environ['POSTGRES_CONTAINER']
+        serveris = os.environ['POSTGRES_CONTAINER']
+        AUGSUPLADE_LIETOTAJS = os.environ['AUGSUPLADE_LIETOTAJS']
+        AUGSUPLADE_PAROLE = os.environ['AUGSUPLADE_PAROLE']
         #serveris = 'api_db_image'
         del os.environ['POSTGRES_PASSWORD']
         del os.environ['POSTGRES_CONTAINER']
@@ -18,6 +23,8 @@ except:
     if ieladet_env:
         password = 'adminadmin'
         serveris = 'localhost'
+        AUGSUPLADE_LIETOTAJS = 'juris'
+        AUGSUPLADE_PAROLE = 'peldbaseins'
         ieladet_env = False
 
 
