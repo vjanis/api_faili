@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Sequence
 
 import datetime
 
@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 
 class Auditacija(Base):
     __tablename__ = 'auditacija'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('auditacija_id_seq'), primary_key=True)
     laiks = Column(DateTime, default=datetime.datetime.utcnow)
     darbiba = Column(String)
     parametri = Column(String)
