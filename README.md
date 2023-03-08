@@ -28,3 +28,4 @@ Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un 
 * metrika=7, apraksts='api_faili_web: Augšuplādēts nekortekts fails (ne .csv fails)'
 * metrika=8, apraksts='api_faili_web: Augšuplādēts .csv fails'
 * metrika=9, apraksts='api_faili_web: Augšuplāde kļūdaina'
+* metrika=27, apraksts='api_faili_web: Nekorekts lietotājvārds vai parole'
