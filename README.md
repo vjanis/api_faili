@@ -9,7 +9,7 @@ Augšuplādējot failam tiek mainīts nosaukums, sākumā pievienojot datumu un 
 ### Tiek pārbaudīts:
 * faila tips: jābūt .csv
 * faila izmērs: definēts config.py - FILE_SIZE
-* basic autentifikācija ka env mainīgo jānodod lietotājvārdu un paroli ar kuru var augšuplādēt failu
+* basic autentifikācija, env mainīgajos jānodod lietotājvārdu un paroli ar kuru var augšuplādēt failu
 
 ### .env
 * POSTGRES_PASSWORD=parole
